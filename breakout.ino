@@ -53,7 +53,8 @@ enum possibleStates {
   SERVE,
   WIN,
   STARTGAME,
-  POINT
+  POINT,
+  DIE
 };
 
 possibleStates gameState;
@@ -65,9 +66,11 @@ int startDir[] = {UPLEFT, UP, UPRIGHT}
 
 // Paddle
 int score = 0;
-int paddle_pos            =   0;
-byte leftLeftButton_currentState   = 0;
+int paddle_pos                      = 0;
+byte leftLeftButton_currentState    = 0;
+byte leftLeftButton_previousState   = 0;
 byte rightRightButton_currentState  = 0;
+byte rightRightButton_previousState = 0;
 
 bool isCollisionResult = 0;
 
@@ -139,4 +142,145 @@ void setup() {
     sei();
   }
 
+}
+
+void loop() {
+
+  // If you are using the USB mode then update the USb connection
+  if (usbEnabled) {
+    UsbKeyboard.update();
+  }
+
+  //Run the row and column button scans
+  buttonScan();
+
+  //If the left button of the leftpad was pressed...
+  if (leftLeftButton_currentState != leftLeftButton_previousState && !leftLeftButton_previousState) {
+    //Move the paddle left
+    paddle_pos--;
+    //Left correction for going off the screen
+    if (paddle_pos < 0) {
+      paddle_pos = 0;
+    }
+    //These lines erase the sprite, write its new position, then push that to the screen
+    gameScreen.clearSprite(sprite_lst[paddle]);
+    sprite_lst[leftPad].updateOrigin(paddle_pos, 0);
+    gameScreen.updateMasterScreen(sprite_lst[paddle]);
+  }
+
+  //If the right button of the rightpad was pressed...
+  else if (rightRightButton_currentState != rightRightButton_previousState && !rightRightButton_previousState) {
+    //Move the paddle left
+    paddle_pos++;
+    //Left correct
+    if (paddle_pos > 4) {
+      leftPaddlePosition = 4;
+    }
+    gameScreen.clearSprite(sprite_lst[paddle]);
+    sprite_lst[leftPad].updateOrigin(paddle_pos, 0);
+    gameScreen.updateMasterScreen(sprite_lst[paddle]);
+  }
+
+  //this code checks the current time to see if the ball should move
+  sprite_lst[ball].current_time = millis();
+  if ((sprite_lst[ball].current_time - sprite_lst[ball].previous_time) >= sprite_lst[ball].duration)
+  {
+    sprite_lst[ball].previous_time = sprite_lst[ball].current_time;
+
+    if (sprite_lst[ball].x_ > 7) {
+      sprite_lst[ball].x_ = 7;
+    } else if (sprite_lst[ball].x_ < 0) {
+      sprite_lst[ball].x_ = 0;
+    }
+
+    if (sprite_lst[ball].y_ > 7) {
+      sprite_lst[ball].y_ = 7;
+      // TODO: out of bounds ball -> DIE
+    } else if (sprite_lst[ball].y_ < 0) {
+      sprite_lst[ball].y_ = 0;
+    }
+
+    //Checks if the ball hit something
+    // TODO: Implement collisions
+    //isCollisionResult = sprite_lst[ball].isCollisionNoScreen(num_sprites, ball, sprite_lst, sprite_lst[ball].x_, sprite_lst[ball].y_);
+
+    //if no collision redraw the ball
+    // if (isCollisionResult == false) {
+    //   //clear Sprite
+    //   gameScreen.clearSprite(sprite_lst[ball]);
+    //
+    //   //update origin
+    //   sprite_lst[ball].updateOrigin(sprite_lst[ball].x_, sprite_lst[ball].y_);
+    //
+    //   //update screen matrix
+    //   gameScreen.updateMasterScreen(sprite_lst[ball]);
+    // } else {
+    //   //Collision with paddle sound
+    //   // tone(9, 459, 96);
+    //   tone(9, 100, 96);
+    // }
+    //Figure out the next move of the ball
+    stateChange();
+    }
+  }//End of loop()
+
+  void buttonScan() {
+  // Reset varibles
+  leftLeftButton_previousState = leftLeftButton_currentState;
+  leftLeftButton_currentState = 0;
+
+  for (int y = 0; y < 3; y++) { //Outputs
+    digitalWrite(leftOutputs[y], LOW); //Turn column on
+    for (int x = 0; x < 2 ; x++) { //Inputs
+      if (!digitalRead(leftInputs[x])) { //Read row
+        if (x == 0  && y == 0) {
+          //Left left is pressed down
+          // TODO: x could either be 0 or 1, just test to figure out the hardware
+          leftLeftButton_currentState = 1;
+        }
+      }
+    }//End of x
+    digitalWrite(leftOutputs[y], HIGH); //turn column off
+  }//End of y
+
+  rightRightButton_previousState = rightRightButton_currentState;
+  rightRightButton_currentState = 0;
+
+  for (int y = 0; y < 3; y++) { //Outputs
+    digitalWrite(rightOutputs[y], LOW); //Turn column on
+    for (int x = 0; x < 2 ; x++) { //Inputs
+      if (!digitalRead(rightInputs[x])) { //Read row
+        if (x == 0  && y == 0) {
+          rightRightButton_currentState = 1;
+        }
+      }
+    }//End of x
+    digitalWrite(rightOutputs[y], HIGH); //turn column off
+  }//End of y
+
+}
+
+void stateChange()
+{
+  sprite_lst[ball].prevState = sprite_lst[ball].state;
+  //Refer to the ball state diagram in the learning module
+  switch (gameState) {
+    case STARTGAME:
+      //*******Game board Specific Sprite starting Position Stuff*********
+
+      //gameScreen.clearMasterScreen();
+      sprite_lst[ball].duration = 200;
+      sprite_lst[ball].x_ = 4;
+      sprite_lst[ball].y_ = 1;
+
+      sprite_lst[paddle].updateOrigin(paddle_pos, 0);
+      gameScreen.updateMasterScreen(sprite_lst[paddle]);
+
+      score = 0;
+      delay(1000);
+      clearScore();
+      //This might change to something smarter
+      gameState = startDir[1];
+      break;
+    }
 }
