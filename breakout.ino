@@ -60,7 +60,7 @@ enum possibleStates {
 possibleStates gameState;
 
 //Starting direction; these are the possibilities for a ball served from the paddle
-int startDir[] = {UPLEFT, UP, UPRIGHT}
+int startDir[] = {UPLEFT, UP, UPRIGHT};
 
 //***********Paddle Global Variables************
 
@@ -80,7 +80,7 @@ masterScreen gameScreen;
 //Declare the paddles and ball
 RGB_Sprite sprite_lst[num_sprites];
 //Declare the score counters
-RGB_Sprite score;
+RGB_Sprite score_sprite;
 
 void setup() {
 
@@ -110,7 +110,7 @@ void setup() {
 
   sprite_lst[ball].Sprite(1, 1, 4);
 
-  score.Sprite(1, 8, 0,
+  score_sprite.Sprite(1, 8, 0,
                   0,
                   0,
                   0,
@@ -120,7 +120,7 @@ void setup() {
                   0);
 
   // TODO: Update the origin of the score to be in a more appropriate location
-  score.updateOrigin(3, 0);
+  score_sprite.updateOrigin(3, 0);
 
   //start with the game at the STARTGAME state
   gameState = STARTGAME;
@@ -135,7 +135,7 @@ void setup() {
 
     // Force re-enumeration so the host will detect us
     usbDeviceDisconnect();
-    delayMs(250);
+    delayMicroseconds(250);
     usbDeviceConnect();
 
     // Set interrupts again
@@ -164,7 +164,7 @@ void loop() {
     }
     //These lines erase the sprite, write its new position, then push that to the screen
     gameScreen.clearSprite(sprite_lst[paddle]);
-    sprite_lst[leftPad].updateOrigin(paddle_pos, 0);
+    sprite_lst[paddle].updateOrigin(paddle_pos, 0);
     gameScreen.updateMasterScreen(sprite_lst[paddle]);
   }
 
@@ -174,10 +174,10 @@ void loop() {
     paddle_pos++;
     //Left correct
     if (paddle_pos > 4) {
-      leftPaddlePosition = 4;
+      paddle_pos = 4;
     }
     gameScreen.clearSprite(sprite_lst[paddle]);
-    sprite_lst[leftPad].updateOrigin(paddle_pos, 0);
+    sprite_lst[paddle].updateOrigin(paddle_pos, 0);
     gameScreen.updateMasterScreen(sprite_lst[paddle]);
   }
 
@@ -278,7 +278,8 @@ void stateChange()
 
       score = 0;
       delay(1000);
-      clearScore();
+      // TODO: Implement clearScore
+      //clearScore();
       //This might change to something smarter
       gameState = startDir[1];
       break;
