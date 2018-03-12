@@ -135,7 +135,7 @@ void setup() {
 
     // Force re-enumeration so the host will detect us
     usbDeviceDisconnect();
-    delayMicroseconds(250);
+    delayMs(250);
     usbDeviceConnect();
 
     // Set interrupts again
@@ -276,6 +276,8 @@ void stateChange()
       sprite_lst[paddle].updateOrigin(paddle_pos, 0);
       gameScreen.updateMasterScreen(sprite_lst[paddle]);
 
+      gameScreen.updateMasterScreen(sprite_lst[ball]);
+
       score = 0;
       delay(1000);
       // TODO: Implement clearScore
@@ -284,4 +286,19 @@ void stateChange()
       gameState = startDir[1];
       break;
     }
+}
+
+void clearScore()
+{
+  for (byte i = 0; i <= 7; i++) {
+    score_sprite.write(0, i, 0); // write to the height of the sprite
+  }
+  gameScreen.clearSprite(score_sprite);
+}
+
+// helper method for V-USB library
+void delayMs(unsigned int ms) {
+  for ( int i = 0; i < ms; i++ ) {
+    delayMicroseconds(1000);
+  }
 }
