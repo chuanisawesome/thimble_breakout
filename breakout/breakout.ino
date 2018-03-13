@@ -119,9 +119,21 @@ void setup() {
                   0,
                   0);
 
-  // make a row brick sprite
+  // rows of bricks
   for (int brick = 2; brick <= 9; brick++) { //Outputs
     sprite_lst[brick].Sprite(1, 1, 2);
+  }
+
+  for (int brick = 10; brick <= 17; brick++) { //Outputs
+    sprite_lst[brick].Sprite(1, 1, 3);
+  }
+
+  for (int brick = 18; brick <= 25; brick++) { //Outputs
+    sprite_lst[brick].Sprite(1, 1, 4);
+  }
+
+  for (int brick = 26; brick <= 33; brick++) { //Outputs
+    sprite_lst[brick].Sprite(1, 1, 5);
   }
 
   // TODO: Update the origin of the score to be in a more appropriate location
@@ -281,10 +293,13 @@ void stateChange()
       gameScreen.updateMasterScreen(sprite_lst[paddle]);
 
 
-      // make a row of bricks
-      for (int brick = 2, x = 0; brick <= 9; brick++, x++) { //Outputs
-        sprite_lst[brick].updateOrigin(x, 7);
-        gameScreen.updateMasterScreen(sprite_lst[brick]);
+      // make rows and cols of bricks
+      for (int brick_row = 0, y = 7; brick_row <= 3; brick_row++, y--) {
+        for (int brick_col = 2, x = 0; brick_col <= 9; brick_col++, x++) { //Outputs
+          int brick = brick_col + (brick_row * 8);
+          sprite_lst[brick].updateOrigin(x, y);
+          gameScreen.updateMasterScreen(sprite_lst[brick]);
+        }
       }
 
 
