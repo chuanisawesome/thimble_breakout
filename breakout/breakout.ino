@@ -170,7 +170,7 @@ void loop() {
 
   //If the right button of the rightpad was pressed...
   else if (rightRightButton_currentState != rightRightButton_previousState && !rightRightButton_previousState) {
-    //Move the paddle left
+    //Move the paddle right
     paddle_pos++;
     //Left correct
     if (paddle_pos > 4) {
