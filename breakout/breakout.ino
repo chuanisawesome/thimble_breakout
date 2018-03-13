@@ -121,7 +121,7 @@ void setup() {
 
   // make a row brick sprite
   for (int brick = 2; brick <= 9; brick++) { //Outputs
-    sprite_lst[brick].Sprite(1, 1, brick);
+    sprite_lst[brick].Sprite(1, 1, 2);
   }
 
   // TODO: Update the origin of the score to be in a more appropriate location
