@@ -235,7 +235,6 @@ void loop() {
       if (!digitalRead(leftInputs[x])) { //Read row
         if (x == 0  && y == 0) {
           //Left left is pressed down
-          // TODO: x could either be 0 or 1, just test to figure out the hardware
           leftLeftButton_currentState = 1;
         }
       }
@@ -250,7 +249,7 @@ void loop() {
     digitalWrite(rightOutputs[y], LOW); //Turn column on
     for (int x = 0; x < 2 ; x++) { //Inputs
       if (!digitalRead(rightInputs[x])) { //Read row
-        if (x == 0  && y == 0) {
+        if (x == 1  && y == 0) {
           rightRightButton_currentState = 1;
         }
       }
