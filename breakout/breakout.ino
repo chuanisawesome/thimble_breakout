@@ -21,7 +21,7 @@ bool usbEnabled = false;
 #define num_sprites 34
 #define paddle      0
 #define ball        1
-// sprintes 2 - 33 are bricks
+// sprites 2 - 33 are bricks
 
 //Settings for the button scan array, left side
 int leftInputs[] = {A0, A1}; //INPUT_PULLUP reading pins
@@ -66,7 +66,7 @@ int startDir[] = {UPLEFT, UP, UPRIGHT};
 
 // Paddle
 int score = 0;
-int paddle_pos                      = 0;
+int paddle_pos                      = 2;
 byte leftLeftButton_currentState    = 0;
 byte leftLeftButton_previousState   = 0;
 byte rightRightButton_currentState  = 0;
@@ -118,6 +118,9 @@ void setup() {
                   0,
                   0,
                   0);
+
+  // make a brick sprite
+  sprite_lst[2].Sprite(1, 1, 3);
 
   // TODO: Update the origin of the score to be in a more appropriate location
   score_sprite.updateOrigin(3, 0);
@@ -275,7 +278,10 @@ void stateChange()
       sprite_lst[paddle].updateOrigin(paddle_pos, 0);
       gameScreen.updateMasterScreen(sprite_lst[paddle]);
 
-      gameScreen.updateMasterScreen(sprite_lst[ball]);
+      sprite_lst[2].updateOrigin(0, 7); // make one brick top left corner
+
+      // put a brick on the screen
+      gameScreen.updateMasterScreen(sprite_lst[2]);
 
       score = 0;
       delay(1000);
