@@ -206,20 +206,20 @@ void loop() {
 
     if (sprite_lst[ball].x_ > 7) {
       sprite_lst[ball].x_ = 7;
-    } else if (sprite_lst[ball].x_ < 0) {
-      sprite_lst[ball].x_ = 0;
+    } else if (sprite_lst[ball].x_ < 4) {
+      sprite_lst[ball].x_ = 4;
     }
 
     if (sprite_lst[ball].y_ > 7) {
       sprite_lst[ball].y_ = 7;
       // TODO: out of bounds ball -> DIE
-    } else if (sprite_lst[ball].y_ < 0) {
-      sprite_lst[ball].y_ = 0;
+    } else if (sprite_lst[ball].y_ < 1) {
+      sprite_lst[ball].y_ = 1;
     }
 
     //Checks if the ball hit something
     // TODO: Implement collisions
-    //isCollisionResult = sprite_lst[ball].isCollisionNoScreen(num_sprites, ball, sprite_lst, sprite_lst[ball].x_, sprite_lst[ball].y_);
+    isCollisionResult = sprite_lst[ball].isCollisionNoScreen(num_sprites, ball, sprite_lst, sprite_lst[ball].x_, sprite_lst[ball].y_);
 
     //if no collision redraw the ball
     // if (isCollisionResult == false) {
@@ -227,10 +227,10 @@ void loop() {
     //   gameScreen.clearSprite(sprite_lst[ball]);
     //
     //   //update origin
-    //   sprite_lst[ball].updateOrigin(sprite_lst[ball].x_, sprite_lst[ball].y_);
-    //
-    //   //update screen matrix
-    //   gameScreen.updateMasterScreen(sprite_lst[ball]);
+       sprite_lst[ball].updateOrigin(sprite_lst[ball].x_, sprite_lst[ball].y_);
+
+       //update screen matrix
+       gameScreen.updateMasterScreen(sprite_lst[ball]);
     // } else {
     //   //Collision with paddle sound
     //   // tone(9, 459, 96);
@@ -301,6 +301,8 @@ void stateChange()
           gameScreen.updateMasterScreen(sprite_lst[brick]);
         }
       }
+
+
 
 
       score = 0;
