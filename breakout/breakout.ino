@@ -222,15 +222,15 @@ void loop() {
     isCollisionResult = sprite_lst[ball].isCollisionNoScreen(num_sprites, ball, sprite_lst, sprite_lst[ball].x_, sprite_lst[ball].y_);
 
     //if no collision redraw the ball
-     if (isCollisionResult == false) {
-    //   //clear Sprite
-       gameScreen.clearSprite(sprite_lst[ball]);
-    //
-    //   //update origin
-       sprite_lst[ball].updateOrigin(sprite_lst[ball].x_, sprite_lst[ball].y_);
+    if (isCollisionResult == false) {
+    //clear Sprite
+      gameScreen.clearSprite(sprite_lst[ball]);
+    //update origin
+      sprite_lst[ball].updateOrigin(sprite_lst[ball].x_, sprite_lst[ball].y_);
 
-       //update screen matrix
-       gameScreen.updateMasterScreen(sprite_lst[ball]);
+    //update screen matrix
+      gameScreen.updateMasterScreen(sprite_lst[ball]);
+
      } else {
     //   //Collision with paddle sound
     //   // tone(9, 459, 96);
@@ -289,30 +289,103 @@ void stateChange()
       }
       break;
 
+    case UPLEFT:
+      sprite_lst[ball].x_--;
+      sprite_lst[ball].y_++;
+      // if (isCollisionResult == true) {
+      //   sprite_lst[ball].x_ += 2;
+      //   sprite_lst[ball].y_ -= 2;
+      //   gameState = UPRIGHT;
+      // } else if (sprite_lst[ball].isL_boardCollision() == true) {
+      //   RScore++;
+      //   gameState = POINT;
+      // } else if (sprite_lst[ball].isT_boardCollision() == true) {
+      //   sprite_lst[ball].x_++;
+      //   sprite_lst[ball].y_--;
+      //   gameState = DWNLEFT;
+      // }
+      break;
+
+    case UPRIGHT:
+       sprite_lst[ball].x_++;
+       sprite_lst[ball].y_++;
+      //  if (isCollisionResult == true) {
+      //    sprite_lst[ball].x_ -= 2;
+      //    sprite_lst[ball].y_ -= 2;
+      //    gameState = UPLEFT;
+      //  } else if (sprite_lst[ball].isR_boardCollision() == true) {
+      //    //sprite_lst[ball].x_ = 7;
+      //    //sprite_lst[ball].y_ = 6;
+      //    //sprite_lst[ball].state = LEFT;
+      //    LScore++;
+      //    gameState = POINT;
+      //  } else if (sprite_lst[ball].isT_boardCollision() == true) {
+      //    sprite_lst[ball].x_--;
+      //    sprite_lst[ball].y_--;
+      //    gameState = DWNRIGHT;
+      //  }
+       break;
+
     case DOWN:
       sprite_lst[ball].y_--;
       if (sprite_lst[ball].y_ <= 0) {
+        // TODO: Implement DEATH
         gameState = UP;
       }
       break;
 
+    case DWNLEFT:
+        sprite_lst[ball].x_--;
+        sprite_lst[ball].y_--;
+        // if (isCollisionResult == true) {
+        //   sprite_lst[ball].x_ += 2;
+        //   sprite_lst[ball].y_ += 2;
+        //   gameState = DWNRIGHT;
+        // } else if (sprite_lst[ball].isL_boardCollision() == true) {
+        //   RScore++;
+        //   gameState = POINT;
+        // } else if (sprite_lst[ball].isB_boardCollision() == true) {
+        //   sprite_lst[ball].x_++;
+        //   sprite_lst[ball].y_++;
+        //   gameState = UPLEFT;
+        // }
+        break;
+
+    case DWNRIGHT:
+        sprite_lst[ball].x_++;
+        sprite_lst[ball].y_--;
+        // if (isCollisionResult == true) {
+        //   sprite_lst[ball].x_ -= 2;
+        //   sprite_lst[ball].y_ += 2;
+        //   gameState = DWNLEFT;
+        // } else if (sprite_lst[ball].isR_boardCollision() == true) {
+        //   LScore++;
+        //   gameState = POINT;
+        // } else if (sprite_lst[ball].isB_boardCollision() == true) {
+        //   sprite_lst[ball].x_--;
+        //   sprite_lst[ball].y_++;
+        //   gameState = UPRIGHT;
+        // }
+        break;
+
     case SERVE:
       sprite_lst[ball].x_ = 4;
       sprite_lst[ball].y_ = 1;
-      gameState = startDir[random(1, 6)];
+      gameState = startDir[random(1, 3)];
       break;
 
     case STARTGAME:
       //*******Game board Specific Sprite starting Position Stuff*********
 
-      //gameScreen.clearMasterScreen();
       sprite_lst[ball].duration = 200;
       sprite_lst[ball].x_ = 4;
       sprite_lst[ball].y_ = 1;
 
+      score = 0;
+      clearScore();
+
       sprite_lst[paddle].updateOrigin(paddle_pos, 0);
       gameScreen.updateMasterScreen(sprite_lst[paddle]);
-
 
       // make rows and cols of bricks
       for (int brick_row = 0, y = 7; brick_row <= 3; brick_row++, y--) {
@@ -323,15 +396,11 @@ void stateChange()
         }
       }
 
-
-
-
-      score = 0;
-      delay(1000);
-      // TODO: Implement clearScore
-      //clearScore();
       //This might change to something smarter
-      gameState = startDir[random(1,6)];
+      // gameState = startDir[random(1, 3)];
+      gameState = startDir[0];
+      delay(1000);
+
       break;
     }
 }
