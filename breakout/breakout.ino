@@ -222,20 +222,20 @@ void loop() {
     isCollisionResult = sprite_lst[ball].isCollisionNoScreen(num_sprites, ball, sprite_lst, sprite_lst[ball].x_, sprite_lst[ball].y_);
 
     //if no collision redraw the ball
-    // if (isCollisionResult == false) {
+     if (isCollisionResult == false) {
     //   //clear Sprite
-    //   gameScreen.clearSprite(sprite_lst[ball]);
+       gameScreen.clearSprite(sprite_lst[ball]);
     //
     //   //update origin
        sprite_lst[ball].updateOrigin(sprite_lst[ball].x_, sprite_lst[ball].y_);
 
        //update screen matrix
        gameScreen.updateMasterScreen(sprite_lst[ball]);
-    // } else {
+     } else {
     //   //Collision with paddle sound
     //   // tone(9, 459, 96);
-    //   tone(9, 100, 96);
-    // }
+       tone(9, 100, 96);
+     }
     //Figure out the next move of the ball
     stateChange();
     }
@@ -281,6 +281,27 @@ void stateChange()
   sprite_lst[ball].prevState = sprite_lst[ball].state;
   //Refer to the ball state diagram in the learning module
   switch (gameState) {
+
+    case UP:
+      sprite_lst[ball].y_++;
+      if (sprite_lst[ball].y_ >= 7) {
+        gameState = DOWN;
+      }
+      break;
+
+    case DOWN:
+      sprite_lst[ball].y_--;
+      if (sprite_lst[ball].y_ <= 0) {
+        gameState = UP;
+      }
+      break;
+
+    case SERVE:
+      sprite_lst[ball].x_ = 4;
+      sprite_lst[ball].y_ = 1;
+      gameState = startDir[random(1, 6)];
+      break;
+
     case STARTGAME:
       //*******Game board Specific Sprite starting Position Stuff*********
 
@@ -310,7 +331,7 @@ void stateChange()
       // TODO: Implement clearScore
       //clearScore();
       //This might change to something smarter
-      gameState = startDir[1];
+      gameState = startDir[random(1,6)];
       break;
     }
 }
