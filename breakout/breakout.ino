@@ -214,7 +214,7 @@ void loop() {
       sprite_lst[ball].y_ = 7;
     } else if (sprite_lst[ball].y_ < 1) {
       // TODO: out of bounds ball -> DIE
-      sprite_lst[ball].y_ = 1;
+
     }
 
     //Checks if the ball hit something
@@ -277,6 +277,7 @@ void loop() {
 void stateChange()
 {
   sprite_lst[ball].prevState = sprite_lst[ball].state;
+
   //Refer to the ball state diagram in the learning module
   switch (gameState) {
 
@@ -290,8 +291,8 @@ void stateChange()
         gameState = DWNLEFT;
       } else if (sprite_lst[ball].isL_boardCollision() == true) {
         Serial.print("***LEFT WALL***");
-        sprite_lst[ball].x_++;
-        sprite_lst[ball].y_++;
+         sprite_lst[ball].x_++;
+         sprite_lst[ball].y_++;
         gameState = UPRIGHT;
       } else {
         Serial.print("***NORMAL***");
@@ -313,27 +314,27 @@ void stateChange()
         sprite_lst[ball].x_--;
         sprite_lst[ball].y_++;
         gameState = UPLEFT;
-      } else {
+     } else {
         Serial.print("***NORMAL***");
         // translate ball normally
         sprite_lst[ball].x_++;
         sprite_lst[ball].y_++;
       }
-       break;
+      break;
 
     case DWNLEFT:
       Serial.print("---DWNLEFT---");
       if (isCollisionResult == true) {
-        Serial.print("***BRICK***");
+        Serial.print("***PADDLE***");
         // paddle collision
         sprite_lst[ball].x_--;
         sprite_lst[ball].y_++;
-        gameState = DWNRIGHT;
+        gameState = UPLEFT;
       } else if (sprite_lst[ball].isL_boardCollision() == true) {
         // collision with left wall
-        Serial.print("***LEFT***");
-        sprite_lst[ball].x_++;
-        sprite_lst[ball].y_--;
+         Serial.print("***LEFT***");
+         sprite_lst[ball].x_++;
+         sprite_lst[ball].y_--;
         gameState = DWNRIGHT;
       } else if (sprite_lst[ball].isB_boardCollision() == true) {
         Serial.print("***BOTTOM***");
@@ -352,7 +353,7 @@ void stateChange()
     case DWNRIGHT:
       Serial.print("---DWNRIGHT---");
       if (isCollisionResult == true) {
-        Serial.print("***BRICK***");
+        Serial.print("***PADDLE***");
         // paddle collision
         sprite_lst[ball].x_++;
         sprite_lst[ball].y_++;
@@ -398,7 +399,16 @@ void stateChange()
       gameScreen.updateMasterScreen(sprite_lst[paddle]);
 
       // make rows and cols of bricks
-      for (int brick_row = 0, y = 7; brick_row <= 3; brick_row++, y--) {
+      // for (int brick_row = 0, y = 7; brick_row <= 3; brick_row++, y--) {
+      //   for (int brick_col = 2, x = 0; brick_col <= 9; brick_col++, x++) { //Outputs
+      //     int brick = brick_col + (brick_row * 8);
+      //     sprite_lst[brick].updateOrigin(x, y);
+      //     gameScreen.updateMasterScreen(sprite_lst[brick]);
+      //   }
+      // }
+
+      // make rows and cols of bricks
+      for (int brick_row = 0, y = 7; brick_row <= 1; brick_row++, y--) {
         for (int brick_col = 2, x = 0; brick_col <= 9; brick_col++, x++) { //Outputs
           int brick = brick_col + (brick_row * 8);
           sprite_lst[brick].updateOrigin(x, y);
@@ -408,7 +418,7 @@ void stateChange()
 
       //This might change to something smarter
       // gameState = startDir[random(1, 3)];
-      delay(1000);
+      delay(3000);
       // gameState = startDir[random(1, 3)];
       gameState = UPLEFT;
       break;
@@ -429,3 +439,4 @@ void delayMs(unsigned int ms) {
     delayMicroseconds(1000);
   }
 }
+
