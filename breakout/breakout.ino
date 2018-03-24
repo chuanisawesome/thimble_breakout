@@ -286,18 +286,19 @@ switch (gameState) {
     if (isCollisionResult == true) {
       // collision with brick or ceiling
       Serial.print("***BRICK***");
-      sprite_lst[ball].x_--;
-      sprite_lst[ball].y_--;
-      gameState = DWNLEFT;
+      // TODO: Implement brick collision logic
+
     } (sprite_lst[ball].isT_boardCollision() == true) {
        // collision with top board
        Serial.print("***TOP***");
-       // TODO: Implement top board collision
+       sprite_lst[ball].x_--;
+       sprite_lst[ball].y_--;
+       gameState = DWNLEFT;
     } else if (sprite_lst[ball].isL_boardCollision() == true) {
       Serial.print("***LEFT WALL***");
        sprite_lst[ball].x_++;
        sprite_lst[ball].y_++;
-      gameState = UPRIGHT;
+       gameState = UPRIGHT;
     } else {
       Serial.print("***NORMAL***");
       // translate ball normally
@@ -311,13 +312,14 @@ switch (gameState) {
     if (isCollisionResult == true)  {
       // collision with brick
       Serial.print("***BRICK***");
-      sprite_lst[ball].x_++;
-      sprite_lst[ball].y_--;
-      gameState = DWNRIGHT;
+      // TODO: Implement brick collision logic
+      
     } (sprite_lst[ball].isT_boardCollision() == true) {
       // collision with top board
       Serial.print("***TOP***");
-      // TODO: Implement top board collision
+      sprite_lst[ball].x_++;
+      sprite_lst[ball].y_--;
+      gameState = DWNRIGHT;
     } else if (sprite_lst[ball].isR_boardCollision() == true) {
       Serial.print("***RIGHT***");
       sprite_lst[ball].x_--;
