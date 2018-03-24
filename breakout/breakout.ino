@@ -283,12 +283,16 @@ switch (gameState) {
 
   case UPLEFT:
     Serial.print("---UPLEFT---");
-    if ((isCollisionResult == true) || (sprite_lst[ball].isT_boardCollision() == true)) {
+    if (isCollisionResult == true) {
       // collision with brick or ceiling
-      Serial.print("***TOP OR BRICK***");
+      Serial.print("***BRICK***");
       sprite_lst[ball].x_--;
       sprite_lst[ball].y_--;
       gameState = DWNLEFT;
+    } (sprite_lst[ball].isT_boardCollision() == true) {
+       // collision with top board
+       Serial.print("***TOP***");
+       // TODO: Implement top board collision
     } else if (sprite_lst[ball].isL_boardCollision() == true) {
       Serial.print("***LEFT WALL***");
        sprite_lst[ball].x_++;
@@ -304,12 +308,16 @@ switch (gameState) {
 
   case UPRIGHT:
     Serial.print("---UPRIGHT---");
-    if (isCollisionResult == true || sprite_lst[ball].isT_boardCollision() == true) {
-      // collision with brick or ceiling
-      Serial.print("***TOP OR BRICK***");
+    if (isCollisionResult == true)  {
+      // collision with brick
+      Serial.print("***BRICK***");
       sprite_lst[ball].x_++;
       sprite_lst[ball].y_--;
       gameState = DWNRIGHT;
+    } (sprite_lst[ball].isT_boardCollision() == true) {
+      // collision with top board
+      Serial.print("***TOP***");
+      // TODO: Implement top board collision
     } else if (sprite_lst[ball].isR_boardCollision() == true) {
       Serial.print("***RIGHT***");
       sprite_lst[ball].x_--;
