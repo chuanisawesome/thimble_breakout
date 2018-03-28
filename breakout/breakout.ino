@@ -283,6 +283,10 @@ switch (gameState) {
 
   case UPLEFT:
     Serial.print("---UPLEFT---");
+    if (sprite_lst[ball].x_ == 0 && sprite_lst[ball].y_ ==7) {
+      gameState = DWNRIGHT;
+    }
+
     if (isCollisionResult == true) {
       // collision with brick or ceiling
       Serial.print("***BRICK***");
@@ -314,6 +318,10 @@ switch (gameState) {
 
   case UPRIGHT:
     Serial.print("---UPRIGHT---");
+
+  if (sprite_lst[ball].x_ == 7 && sprite_lst[ball].y_ ==7) {
+    gameState = DWNLEFT;
+  }
     if (isCollisionResult == true)  {
       // collision with brick
       Serial.print("***BRICK***");
@@ -439,7 +447,7 @@ switch (gameState) {
     //This might change to something smarter
     // gameState = startDir[random(1, 3)];
     // gameState = startDir[random(1, 3)];
-    gameState = UPLEFT;
+    gameState = UPRIGHT;
     delay(3000);
     break;
   }
