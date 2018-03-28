@@ -287,8 +287,13 @@ switch (gameState) {
       // collision with brick or ceiling
       Serial.print("***BRICK***");
       // TODO: Implement brick collision logic
-
-    } (sprite_lst[ball].isT_boardCollision() == true) {
+      int brick_removal_index = ((sprite_lst[ball].x_) * (8 - sprite_lst[ball].y_)) + 2;
+      Serial.print(brick_removal_index);
+      sprite_lst[brick_removal_index].write(0, 0, 0);
+      gameScreen.clearSprite(sprite_lst[brick_removal_index]);
+      // sprite_lst[brick_removal_index].Sprite(0,0);
+      gameScreen.updateMasterScreen(sprite_lst[brick_removal_index]);
+    } else if (sprite_lst[ball].isT_boardCollision() == true) {
        // collision with top board
        Serial.print("***TOP***");
        sprite_lst[ball].x_--;
@@ -313,8 +318,13 @@ switch (gameState) {
       // collision with brick
       Serial.print("***BRICK***");
       // TODO: Implement brick collision logic
-      
-    } (sprite_lst[ball].isT_boardCollision() == true) {
+      int brick_removal_index = ((sprite_lst[ball].x_) * (8 - sprite_lst[ball].y_)) + 2;
+      Serial.print(brick_removal_index);
+      sprite_lst[brick_removal_index].write(0, 0, 0);
+      gameScreen.clearSprite(sprite_lst[brick_removal_index]);
+      // sprite_lst[brick_removal_index].Sprite(0,0);
+      gameScreen.updateMasterScreen(sprite_lst[brick_removal_index]);
+    } else if (sprite_lst[ball].isT_boardCollision() == true) {
       // collision with top board
       Serial.print("***TOP***");
       sprite_lst[ball].x_++;
@@ -338,7 +348,7 @@ switch (gameState) {
     if (isCollisionResult == true) {
       Serial.print("***PADDLE***");
       // paddle collision
-      sprite_lst[ball].x_--;
+      // TODO: maybe add logic to test for brick collision?
       sprite_lst[ball].y_++;
       gameState = UPLEFT;
     } else if (sprite_lst[ball].isL_boardCollision() == true) {
@@ -366,7 +376,6 @@ switch (gameState) {
     if (isCollisionResult == true) {
       Serial.print("***PADDLE***");
       // paddle collision
-      sprite_lst[ball].x_++;
       sprite_lst[ball].y_++;
       gameState = UPRIGHT;
     } else if (sprite_lst[ball].isR_boardCollision() == true) {
@@ -430,7 +439,7 @@ switch (gameState) {
     //This might change to something smarter
     // gameState = startDir[random(1, 3)];
     // gameState = startDir[random(1, 3)];
-    gameState = UPRIGHT;
+    gameState = UPLEFT;
     delay(3000);
     break;
   }
