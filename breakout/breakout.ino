@@ -73,6 +73,7 @@ byte rightRightButton_currentState = 0;
 byte rightRightButton_previousState = 0;
 
 bool isCollisionResult = 0;
+bool pause = true; // used to delay the beginning of the game so that it appears correctly on screen
 
 //***********Game Screen and Sprite Global Variables************
 //Declare the screen
@@ -125,17 +126,17 @@ for (int brick = 2; brick <= 9; brick++) { //Outputs
   sprite_lst[brick].Sprite(1, 1, 2);
 }
 
-//  for (int brick = 10; brick <= 17; brick++) { //Outputs
-//    sprite_lst[brick].Sprite(1, 1, 3);
-//  }
-//
-//  for (int brick = 18; brick <= 25; brick++) { //Outputs
-//    sprite_lst[brick].Sprite(1, 1, 4);
-//  }
-//
-//  for (int brick = 26; brick <= 33; brick++) { //Outputs
-//    sprite_lst[brick].Sprite(1, 1, 5);
-//  }
+ for (int brick = 10; brick <= 17; brick++) { //Outputs
+   sprite_lst[brick].Sprite(1, 1, 3);
+ }
+
+ // for (int brick = 18; brick <= 25; brick++) { //Outputs
+ //   sprite_lst[brick].Sprite(1, 1, 4);
+ // }
+
+ // for (int brick = 26; brick <= 33; brick++) { //Outputs
+ //   sprite_lst[brick].Sprite(1, 1, 5);
+ // }
 
 // TODO: Update the origin of the score to be in a more appropriate location
 score_sprite.updateOrigin(3, 0);
@@ -276,6 +277,10 @@ for (int y = 0; y < 3; y++) { //Outputs
 
 void stateChange()
 {
+  if (pause == true) {
+    delay(3000);
+    pause = false;
+  }
 sprite_lst[ball].prevState = sprite_lst[ball].state;
 
 //Refer to the ball state diagram in the learning module
@@ -291,12 +296,17 @@ switch (gameState) {
       // collision with brick or ceiling
       Serial.print("***BRICK***");
       // TODO: Implement brick collision logic
-      int brick_removal_index = ((sprite_lst[ball].x_) * (8 - sprite_lst[ball].y_)) + 2;
+      int brick_removal_index = (sprite_lst[ball].x_ + 2) + ((7 - sprite_lst[ball].y_) * 8);
+      Serial.print("brick_removal_index = ");
       Serial.print(brick_removal_index);
+      Serial.print("(7 - sprite_lst[ball].y_ + 1) * 8)");
+      Serial.print((7 - sprite_lst[ball].y_ + 1) * 8);
       sprite_lst[brick_removal_index].write(0, 0, 0);
       gameScreen.clearSprite(sprite_lst[brick_removal_index]);
       // sprite_lst[brick_removal_index].Sprite(0,0);
       gameScreen.updateMasterScreen(sprite_lst[brick_removal_index]);
+      gameState = DWNLEFT;
+
     } else if (sprite_lst[ball].isT_boardCollision() == true) {
        // collision with top board
        Serial.print("***TOP***");
@@ -326,12 +336,16 @@ switch (gameState) {
       // collision with brick
       Serial.print("***BRICK***");
       // TODO: Implement brick collision logic
-      int brick_removal_index = ((sprite_lst[ball].x_) * (8 - sprite_lst[ball].y_)) + 2;
+      int brick_removal_index = (sprite_lst[ball].x_ + 2) + ((7 - sprite_lst[ball].y_ ) * 8);
+      Serial.print("brick_removal_index = ");
       Serial.print(brick_removal_index);
+      Serial.print("(7 - sprite_lst[ball].y_ + 1) * 8)");
+      Serial.print((7 - sprite_lst[ball].y_ + 1) * 8);
       sprite_lst[brick_removal_index].write(0, 0, 0);
       gameScreen.clearSprite(sprite_lst[brick_removal_index]);
       // sprite_lst[brick_removal_index].Sprite(0,0);
       gameScreen.updateMasterScreen(sprite_lst[brick_removal_index]);
+      gameState = DWNRIGHT;
     } else if (sprite_lst[ball].isT_boardCollision() == true) {
       // collision with top board
       Serial.print("***TOP***");
@@ -427,16 +441,7 @@ switch (gameState) {
     gameScreen.updateMasterScreen(sprite_lst[paddle]);
 
     // make rows and cols of bricks
-    // for (int brick_row = 0, y = 7; brick_row <= 3; brick_row++, y--) {
-    //   for (int brick_col = 2, x = 0; brick_col <= 9; brick_col++, x++) { //Outputs
-    //     int brick = brick_col + (brick_row * 8);
-    //     sprite_lst[brick].updateOrigin(x, y);
-    //     gameScreen.updateMasterScreen(sprite_lst[brick]);
-    //   }
-    // }
-
-    // make rows and cols of bricks
-    for (int brick_row = 0, y = 7; brick_row <= 0; brick_row++, y--) {
+    for (int brick_row = 0, y = 7; brick_row <= 3; brick_row++, y--) {
       for (int brick_col = 2, x = 0; brick_col <= 9; brick_col++, x++) { //Outputs
         int brick = brick_col + (brick_row * 8);
         sprite_lst[brick].updateOrigin(x, y);
@@ -444,11 +449,19 @@ switch (gameState) {
       }
     }
 
+    // // make rows and cols of bricks
+    // for (int brick_row = 0, y = 7; brick_row <= 0; brick_row++, y--) {
+    //   for (int brick_col = 2, x = 0; brick_col <= 9; brick_col++, x++) { //Outputs
+    //     int brick = brick_col + (brick_row * 8);
+    //     sprite_lst[brick].updateOrigin(x, y);
+    //     gameScreen.updateMasterScreen(sprite_lst[brick]);
+    //   }
+    // }
+
     //This might change to something smarter
     // gameState = startDir[random(1, 3)];
     // gameState = startDir[random(1, 3)];
-    gameState = UPRIGHT;
-    delay(3000);
+    gameState = UPLEFT;
     break;
   }
 }
