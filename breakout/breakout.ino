@@ -18,10 +18,10 @@ bool usbEnabled = false;
 
 //Defines for readability later on
 
-#define num_sprites 34
+#define num_sprites 25
 #define paddle      0
 #define ball        1
-// sprites 2 - 33 are bricks
+// sprites 2 - 25 are bricks
 
 //Settings for the button scan array, left side
 int leftInputs[] = {A0, A1}; //INPUT_PULLUP reading pins
@@ -60,7 +60,7 @@ DIE
 possibleStates gameState;
 
 //Starting direction; these are the possibilities for a ball served from the paddle
-int startDir[] = {UPLEFT, UPRIGHT};
+int startDir[] = {DWNLEFT, DWNRIGHT};
 
 //***********Paddle Global Variables************
 
@@ -110,7 +110,7 @@ sprite_lst[paddle].Sprite(4, 1, 1,
                            1,
                            1);
 
-sprite_lst[ball].Sprite(1, 1, 4);
+sprite_lst[ball].Sprite(1, 1, 2);
 
 score_sprite.Sprite(1, 8, 0,
                 0,
@@ -133,10 +133,6 @@ for (int brick = 2; brick <= 9; brick++) { //Outputs
   for (int brick = 18; brick <= 25; brick++) { //Outputs
     sprite_lst[brick].Sprite(1, 1, 4);
   }
-
- // for (int brick = 26; brick <= 33; brick++) { //Outputs
- //   sprite_lst[brick].Sprite(1, 1, 5);
- // }
 
 // TODO: Update the origin of the score to be in a more appropriate location
 score_sprite.updateOrigin(3, 0);
@@ -297,13 +293,8 @@ switch (gameState) {
       Serial.print("***BRICK***");
       // TODO: Implement brick collision logic
       int brick_removal_index = (sprite_lst[ball].x_ + 2) + ((7 - sprite_lst[ball].y_) * 8);
-      Serial.print("brick_removal_index = ");
-      Serial.print(brick_removal_index);
-      Serial.print("(7 - sprite_lst[ball].y_ + 1) * 8)");
-      Serial.print((7 - sprite_lst[ball].y_ + 1) * 8);
       sprite_lst[brick_removal_index].write(0, 0, 0);
       gameScreen.clearSprite(sprite_lst[brick_removal_index]);
-      // sprite_lst[brick_removal_index].Sprite(0,0);
       gameScreen.updateMasterScreen(sprite_lst[brick_removal_index]);
       gameState = DWNLEFT;
 
@@ -432,7 +423,7 @@ switch (gameState) {
     Serial.print("STARTGAME");
     sprite_lst[ball].duration = 200;
     sprite_lst[ball].x_ = 4;
-    sprite_lst[ball].y_ = 1;
+    sprite_lst[ball].y_ = 2;
 
     score = 0;
     clearScore();
@@ -440,8 +431,7 @@ switch (gameState) {
     sprite_lst[paddle].updateOrigin(paddle_pos, 0);
     gameScreen.updateMasterScreen(sprite_lst[paddle]);
 
-    // make rows and cols of bricks
-    for (int brick_row = 0, y = 7; brick_row <= 3; brick_row++, y--) {
+    for (int brick_row = 0, y = 7; brick_row < 3; brick_row++, y--) {
       for (int brick_col = 2, x = 0; brick_col <= 9; brick_col++, x++) { //Outputs
         int brick = brick_col + (brick_row * 8);
         sprite_lst[brick].updateOrigin(x, y);
@@ -449,19 +439,11 @@ switch (gameState) {
       }
     }
 
-    // // make rows and cols of bricks
-    // for (int brick_row = 0, y = 7; brick_row <= 0; brick_row++, y--) {
-    //   for (int brick_col = 2, x = 0; brick_col <= 9; brick_col++, x++) { //Outputs
-    //     int brick = brick_col + (brick_row * 8);
-    //     sprite_lst[brick].updateOrigin(x, y);
-    //     gameScreen.updateMasterScreen(sprite_lst[brick]);
-    //   }
-    // }
-
     //This might change to something smarter
-    // gameState = startDir[random(1, 3)];
-    // gameState = startDir[random(1, 3)];
-    gameState = UPLEFT;
+//    gameState = startDir[random(1, 3)];
+Serial.print("RANDOM START DIR: ");
+Serial.print(startDir[random(1, 3)]);
+    gameState = DWNRIGHT;
     break;
   }
 }
