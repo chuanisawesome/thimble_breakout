@@ -123,16 +123,16 @@ score_sprite.Sprite(1, 8, 0,
 
 // rows of bricks
 for (int brick = 2; brick <= 9; brick++) { //Outputs
-  sprite_lst[brick].Sprite(1, 1, 2);
+  sprite_lst[brick].Sprite(1, 1, 1);
 }
 
  for (int brick = 10; brick <= 17; brick++) { //Outputs
-   sprite_lst[brick].Sprite(1, 1, 3);
+   sprite_lst[brick].Sprite(1, 1, 2);
  }
 
- // for (int brick = 18; brick <= 25; brick++) { //Outputs
- //   sprite_lst[brick].Sprite(1, 1, 4);
- // }
+  for (int brick = 18; brick <= 25; brick++) { //Outputs
+    sprite_lst[brick].Sprite(1, 1, 4);
+  }
 
  // for (int brick = 26; brick <= 33; brick++) { //Outputs
  //   sprite_lst[brick].Sprite(1, 1, 5);
