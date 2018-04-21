@@ -49,12 +49,11 @@ UPLEFT,
 DOWN,
 DWNRIGHT,
 DWNLEFT,
+DEATH,
 PAUSE,
 SERVE,
 WIN,
-STARTGAME,
-POINT,
-DIE
+STARTGAME
 };
 
 possibleStates gameState;
@@ -66,6 +65,7 @@ int startDir[] = {DWNLEFT, DWNRIGHT};
 
 // Paddle
 int score = 0;
+int x_start_pos = random(0, 3);
 int paddle_pos = 2;
 byte leftLeftButton_currentState = 0;
 byte leftLeftButton_previousState = 0;
@@ -73,15 +73,12 @@ byte rightRightButton_currentState = 0;
 byte rightRightButton_previousState = 0;
 
 bool isCollisionResult = 0;
-bool pause = true; // used to delay the beginning of the game so that it appears correctly on screen
 
 //***********Game Screen and Sprite Global Variables************
 //Declare the screen
 masterScreen gameScreen;
 //Declare the paddles and ball
 RGB_Sprite sprite_lst[num_sprites];
-//Declare the score counters
-RGB_Sprite score_sprite;
 
 void setup() {
 Serial.begin(9600);
@@ -112,15 +109,6 @@ sprite_lst[paddle].Sprite(4, 1, 1,
 
 sprite_lst[ball].Sprite(1, 1, 2);
 
-score_sprite.Sprite(1, 8, 0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0);
-
 // rows of bricks
 for (int brick = 2; brick <= 9; brick++) { //Outputs
   sprite_lst[brick].Sprite(1, 1, 1);
@@ -134,8 +122,6 @@ for (int brick = 2; brick <= 9; brick++) { //Outputs
     sprite_lst[brick].Sprite(1, 1, 4);
   }
 
-// TODO: Update the origin of the score to be in a more appropriate location
-score_sprite.updateOrigin(3, 0);
 
 //start with the game at the STARTGAME state
 gameState = STARTGAME;
@@ -209,9 +195,6 @@ if ((sprite_lst[ball].current_time - sprite_lst[ball].previous_time) >= sprite_l
 
   if (sprite_lst[ball].y_ > 7) {
     sprite_lst[ball].y_ = 7;
-  } else if (sprite_lst[ball].y_ < 1) {
-    // TODO: out of bounds ball -> DIE
-
   }
 
   //Checks if the ball hit something
@@ -273,15 +256,10 @@ for (int y = 0; y < 3; y++) { //Outputs
 
 void stateChange()
 {
-  if (pause == true) {
-    delay(3000);
-    pause = false;
-  }
 sprite_lst[ball].prevState = sprite_lst[ball].state;
 
 //Refer to the ball state diagram in the learning module
 switch (gameState) {
-
   case UPLEFT:
     Serial.print("---UPLEFT---");
     if (sprite_lst[ball].x_ == 0 && sprite_lst[ball].y_ ==7) {
@@ -292,10 +270,10 @@ switch (gameState) {
       // collision with brick or ceiling
       Serial.print("***BRICK***");
       // TODO: Implement brick collision logic
-      int brick_removal_index = (sprite_lst[ball].x_ + 2) + ((7 - sprite_lst[ball].y_) * 8);
-      sprite_lst[brick_removal_index].write(0, 0, 0);
-      gameScreen.clearSprite(sprite_lst[brick_removal_index]);
-      gameScreen.updateMasterScreen(sprite_lst[brick_removal_index]);
+      int val_index = (sprite_lst[ball].x_ + 2) + ((7 - sprite_lst[ball].y_) * 8);
+      sprite_lst[val_index].write(0, 0, 0);
+      gameScreen.clearSprite(sprite_lst[val_index]);
+      gameScreen.updateMasterScreen(sprite_lst[val_index]);
       gameState = DWNLEFT;
 
     } else if (sprite_lst[ball].isT_boardCollision() == true) {
@@ -328,13 +306,8 @@ switch (gameState) {
       Serial.print("***BRICK***");
       // TODO: Implement brick collision logic
       int brick_removal_index = (sprite_lst[ball].x_ + 2) + ((7 - sprite_lst[ball].y_ ) * 8);
-      Serial.print("brick_removal_index = ");
-      Serial.print(brick_removal_index);
-      Serial.print("(7 - sprite_lst[ball].y_ + 1) * 8)");
-      Serial.print((7 - sprite_lst[ball].y_ + 1) * 8);
       sprite_lst[brick_removal_index].write(0, 0, 0);
       gameScreen.clearSprite(sprite_lst[brick_removal_index]);
-      // sprite_lst[brick_removal_index].Sprite(0,0);
       gameScreen.updateMasterScreen(sprite_lst[brick_removal_index]);
       gameState = DWNRIGHT;
     } else if (sprite_lst[ball].isT_boardCollision() == true) {
@@ -358,6 +331,10 @@ switch (gameState) {
 
   case DWNLEFT:
     Serial.print("---DWNLEFT---");
+    if (sprite_lst[ball].y_ <= 0){
+      gameState = DEATH;
+    }
+
     if (isCollisionResult == true) {
       Serial.print("***PADDLE***");
       // paddle collision
@@ -386,6 +363,9 @@ switch (gameState) {
 
   case DWNRIGHT:
     Serial.print("---DWNRIGHT---");
+    if (sprite_lst[ball].y_ <= 0){
+      gameState = DEATH;
+    }
     if (isCollisionResult == true) {
       Serial.print("***PADDLE***");
       // paddle collision
@@ -411,23 +391,39 @@ switch (gameState) {
     }
     break;
 
+  case DEATH:
+    Serial.print("DEATH");
+    gameState = PAUSE;
+    break;
+
+  case PAUSE:
+    delay(1000);
+    gameState = SERVE;
+    break;
+
   case SERVE:
     Serial.print("SERVE");
-    sprite_lst[ball].x_ = 4;
-    sprite_lst[ball].y_ = 1;
-    gameState = startDir[random(1, 3)];
+    x_start_pos = random(4, 8);
+    sprite_lst[ball].x_ = x_start_pos;
+    sprite_lst[ball].y_ = 2;
+    gameState = DWNLEFT;
     break;
 
   case STARTGAME:
     //*******Game board Specific Sprite starting Position Stuff*********
     Serial.print("STARTGAME");
-    sprite_lst[ball].duration = 200;
-    sprite_lst[ball].x_ = 4;
+    sprite_lst[ball].duration = 150;
+
+    sprite_lst[ball].x_ = x_start_pos;
     sprite_lst[ball].y_ = 2;
 
     score = 0;
-    clearScore();
 
+    // Clear the whole screen first.
+    gameScreen.clearMasterScreen();
+
+
+    // Draw on top of a blank canvas.
     sprite_lst[paddle].updateOrigin(paddle_pos, 0);
     gameScreen.updateMasterScreen(sprite_lst[paddle]);
 
@@ -439,26 +435,14 @@ switch (gameState) {
       }
     }
 
-    //This might change to something smarter
-//    gameState = startDir[random(1, 3)];
-Serial.print("RANDOM START DIR: ");
-Serial.print(startDir[random(1, 3)]);
     gameState = DWNRIGHT;
     break;
   }
 }
 
-void clearScore()
-{
-for (byte i = 0; i <= 7; i++) {
-  score_sprite.write(0, i, 0); // write to the height of the sprite
-}
-gameScreen.clearSprite(score_sprite);
-}
-
 // helper method for V-USB library
 void delayMs(unsigned int ms) {
-for ( int i = 0; i < ms; i++ ) {
-  delayMicroseconds(1000);
-}
+  for ( int i = 0; i < ms; i++ ) {
+    delayMicroseconds(1000);
+  }
 }
