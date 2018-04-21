@@ -65,7 +65,7 @@ int startDir[] = {DWNLEFT, DWNRIGHT};
 
 // Paddle
 int score = 0;
-int x_start_pos = random(0, 3);
+int x_start_pos = 0;
 int paddle_pos = 2;
 byte leftLeftButton_currentState = 0;
 byte leftLeftButton_previousState = 0;
@@ -298,13 +298,12 @@ switch (gameState) {
   case UPRIGHT:
     Serial.print("---UPRIGHT---");
 
-  if (sprite_lst[ball].x_ == 7 && sprite_lst[ball].y_ ==7) {
+  if (sprite_lst[ball].x_ == 7 && sprite_lst[ball].y_ == 7) {
     gameState = DWNLEFT;
   }
     if (isCollisionResult == true)  {
       // collision with brick
       Serial.print("***BRICK***");
-      // TODO: Implement brick collision logic
       int brick_removal_index = (sprite_lst[ball].x_ + 2) + ((7 - sprite_lst[ball].y_ ) * 8);
       sprite_lst[brick_removal_index].write(0, 0, 0);
       gameScreen.clearSprite(sprite_lst[brick_removal_index]);
@@ -331,10 +330,6 @@ switch (gameState) {
 
   case DWNLEFT:
     Serial.print("---DWNLEFT---");
-    if (sprite_lst[ball].y_ <= 0){
-      gameState = DEATH;
-    }
-
     if (isCollisionResult == true) {
       Serial.print("***PADDLE***");
       // paddle collision
@@ -349,10 +344,7 @@ switch (gameState) {
       gameState = DWNRIGHT;
     } else if (sprite_lst[ball].isB_boardCollision() == true) {
       Serial.print("***BOTTOM***");
-      // TODO: This is temporary for testing; remove when validated
-      sprite_lst[ball].x_--;
-      sprite_lst[ball].y_++;
-      gameState = UPLEFT;
+      gameState = DEATH;
     } else {
       // translate the ball normally
       Serial.print("***NORMAL***");
@@ -363,7 +355,7 @@ switch (gameState) {
 
   case DWNRIGHT:
     Serial.print("---DWNRIGHT---");
-    if (sprite_lst[ball].y_ <= 0){
+    if (sprite_lst[ball].isB_boardCollision() == true){
       gameState = DEATH;
     }
     if (isCollisionResult == true) {
@@ -379,10 +371,7 @@ switch (gameState) {
       gameState = DWNLEFT;
     } else if (sprite_lst[ball].isB_boardCollision() == true) {
       Serial.print("***BOTTOM***");
-      // TODO: This is temporary for testing; remove when validated
-      sprite_lst[ball].x_++;
-      sprite_lst[ball].y_++;
-      gameState = UPRIGHT;
+      gameState = DEATH;
     } else {
       // translate the ball normally
       Serial.print("***NORMAL***");
@@ -435,7 +424,7 @@ switch (gameState) {
       }
     }
 
-    gameState = DWNRIGHT;
+    gameState = SERVE;
     break;
   }
 }
