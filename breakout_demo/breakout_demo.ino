@@ -446,13 +446,14 @@ switch (gameState) {
     sprite_lst[paddle].updateOrigin(paddle_pos, 0);
     gameScreen.updateMasterScreen(sprite_lst[paddle]);
 
-    for (int brick_row = 0, y = 7; brick_row < 3; brick_row++, y--) {
-      for (int brick_col = 2, x = 0; brick_col <= 9; brick_col++, x++) { //Outputs
-        int brick = brick_col + (brick_row * 8);
-        sprite_lst[brick].updateOrigin(x, y);
-        gameScreen.updateMasterScreen(sprite_lst[brick]);
-      }
-    }
+    // Remove bricks for demo
+    // for (int brick_row = 0, y = 7; brick_row < 3; brick_row++, y--) {
+    //   for (int brick_col = 2, x = 0; brick_col <= 9; brick_col++, x++) { //Outputs
+    //     int brick = brick_col + (brick_row * 8);
+    //     sprite_lst[brick].updateOrigin(x, y);
+    //     gameScreen.updateMasterScreen(sprite_lst[brick]);
+    //   }
+    // }
 
     gameState = DEATH;
     break;
