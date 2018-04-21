@@ -70,8 +70,10 @@ bool leftHeld[2][3] =  { // Variables for presses
   {false, false, false}
 };
 int leftButtons[2][3] = { //Used to translate  the reading to a real button
-  {KEY_ARROW_LEFT, KEY_ARROW_UP, KEY_SPACE},
-  {KEY_ARROW_RIGHT, KEY_ARROW_DOWN, KEY_SPACE}
+  {KEY_ARROW_LEFT, KEY_ARROW_LEFT, KEY_ARROW_LEFT},
+  {KEY_ARROW_RIGHT, KEY_ARROW_RIGHT, KEY_ARROW_LEFT}
+  // {KEY_ARROW_LEFT, KEY_ARROW_UP, KEY_SPACE},
+  //{KEY_ARROW_RIGHT, KEY_ARROW_DOWN, KEY_SPACE}
 };
 
 /*
@@ -88,8 +90,10 @@ bool rightHeld[2][3] =  { // Variables for presses
   {false, false, false}
 };
 int rightButtons[2][3] = {
-  {KEY_X, KEY_Y, KEY_SPACE},
-  {KEY_A, KEY_B, KEY_SPACE}
+  {KEY_ARROW_LEFT, KEY_ARROW_RIGHT, KEY_ARROW_RIGHT},
+  {KEY_ARROW_RIGHT, KEY_ARROW_LEFT, KEY_ARROW_RIGHT}
+  //{KEY_X, KEY_Y, KEY_SPACE},
+  //{KEY_A, KEY_B, KEY_SPACE}
 };
 
 /*
@@ -104,6 +108,8 @@ void setup() {
   for (int i = 0; i < 2; i++) {
     pinMode(leftInputs[i], INPUT_PULLUP);
     pinMode(rightInputs[i], INPUT_PULLUP);
+
+    delay(200);
   }
 
   //Set outputs
@@ -122,14 +128,11 @@ void setup() {
   Serial.begin(9600); //For debugging
 }
 
-
-
-
 #if BYPASS_TIMER_ISR
 void delayMs(unsigned int ms) {
 
   for (int i = 0; i < ms; i++) {
-    delayMicroseconds(1000);
+    delayMicroseconds(100);
   }
 }
 #endif
@@ -145,6 +148,15 @@ void loop() {
       if (!digitalRead(leftInputs[x])) { //Read row
         //Button is pressed
         if (!leftHeld[x][y]) {
+          UsbKeyboard.sendKeyStroke(leftButtons[x][y]);
+          UsbKeyboard.sendKeyStroke(leftButtons[x][y]);
+          UsbKeyboard.sendKeyStroke(leftButtons[x][y]);
+          UsbKeyboard.sendKeyStroke(leftButtons[x][y]);
+          UsbKeyboard.sendKeyStroke(leftButtons[x][y]);
+          UsbKeyboard.sendKeyStroke(leftButtons[x][y]);
+          UsbKeyboard.sendKeyStroke(leftButtons[x][y]);
+          UsbKeyboard.sendKeyStroke(leftButtons[x][y]);
+          UsbKeyboard.sendKeyStroke(leftButtons[x][y]);
           UsbKeyboard.sendKeyStroke(leftButtons[x][y]);
           leftHeld[x][y] = true;
         }
@@ -163,6 +175,15 @@ void loop() {
       if (!digitalRead(rightInputs[x])) { //Read row
         if (!rightHeld[x][y]) {
           UsbKeyboard.sendKeyStroke(rightButtons[x][y]);
+          UsbKeyboard.sendKeyStroke(rightButtons[x][y]);
+          UsbKeyboard.sendKeyStroke(rightButtons[x][y]);
+          UsbKeyboard.sendKeyStroke(rightButtons[x][y]);
+          UsbKeyboard.sendKeyStroke(rightButtons[x][y]);
+          UsbKeyboard.sendKeyStroke(rightButtons[x][y]);
+          UsbKeyboard.sendKeyStroke(rightButtons[x][y]);
+          UsbKeyboard.sendKeyStroke(rightButtons[x][y]);
+          UsbKeyboard.sendKeyStroke(rightButtons[x][y]);
+          UsbKeyboard.sendKeyStroke(rightButtons[x][y]);
           rightHeld[x][y] = true;
         }
       }
@@ -174,11 +195,8 @@ void loop() {
   }//End of x
 
 #if BYPASS_TIMER_ISR  // check if timer isr fixed.
-  delayMs(20);
+  delayMs(10);
 #else
-  delay(20);
+  delay(10);
 #endif
 }
-
-
-
