@@ -257,17 +257,19 @@ void stateChange()
 {
 sprite_lst[ball].prevState = sprite_lst[ball].state;
 
-//Refer to the ball state diagram in the learning module
-switch (gameState) {
 
   Serial.print("CURRENT SCORE: ");
   Serial.print(score);
 
   Serial.print("CURRENT DEATHS: ");
   Serial.print(death);
+
   if (score > 20){
     sprite_lst[ball].Sprite(1, 1, 3);
   }
+
+//Refer to the ball state diagram in the learning module
+switch (gameState) {
 
   case UPLEFT:
     Serial.print("---UPLEFT---");
@@ -343,8 +345,6 @@ switch (gameState) {
 
   case DWNLEFT:
     Serial.print("---DWNLEFT---");
-    Serial.print("sprite_lst[ball].y_ == ");
-    Serial.print(sprite_lst[ball].y_);
 
     // Corner case
     if (sprite_lst[ball].x_ == 0 && sprite_lst[ball].y_ == 0) {
@@ -353,17 +353,19 @@ switch (gameState) {
     }
 
     if (isCollisionResult == true) {
-      Serial.print("***PADDLE***");
-      // paddle collision
-      // TODO: maybe add logic to test for brick collision?
-      sprite_lst[ball].y_++;
+      if (sprite_lst[ball].y_ < 5) {
+        Serial.print("***PADDLE***");
+        sprite_lst[ball].y_--;
+        // Serial.print("***BRICK***");
+        // int brick_removal_index = (sprite_lst[ball].x_ + 2) + ((7 - sprite_lst[ball].y_ ) * 8);
+        // sprite_lst[brick_removal_index].write(0, 0, 0);
+        // gameScreen.clearSprite(sprite_lst[brick_removal_index]);
+        // gameScreen.updateMasterScreen(sprite_lst[brick_removal_index]);
+      } else {
+        Serial.print("***PADDLE***");
+        sprite_lst[ball].y_--;
+      }
       gameState = UPLEFT;
-    // } else if (isCollisionResult == true && sprite_lst[ball].y_ >= 5) {
-    //   Serial.print("***BRICK***");
-    //   int brick_removal_index = (sprite_lst[ball].x_ + 2) + ((7 - sprite_lst[ball].y_ ) * 8);
-    //   sprite_lst[brick_removal_index].write(0, 0, 0);
-    //   gameScreen.clearSprite(sprite_lst[brick_removal_index]);
-    //   gameScreen.updateMasterScreen(sprite_lst[brick_removal_index]);
     } else if (sprite_lst[ball].isL_boardCollision() == true) {
       // collision with left wall
        Serial.print("***LEFT***");
@@ -396,16 +398,21 @@ switch (gameState) {
       death++;
     }
     if (isCollisionResult == true) {
-      Serial.print("***PADDLE***");
-      // paddle collision
-      sprite_lst[ball].y_++;
+      if (sprite_lst[ball].y_ < 5) {
+        Serial.print("***PADDLE***");
+        sprite_lst[ball].y_++;
+        // Serial.print("***BRICK***");
+        // int brick_removal_index = (sprite_lst[ball].x_ + 2) + ((7 - sprite_lst[ball].y_ ) * 8);
+        // sprite_lst[brick_removal_index].write(0, 0, 0);
+        // gameScreen.clearSprite(sprite_lst[brick_removal_index]);
+        // gameScreen.updateMasterScreen(sprite_lst[brick_removal_index]);
+      } else {
+        Serial.print("***PADDLE***");
+        sprite_lst[ball].y_++;
+      }
       gameState = UPRIGHT;
-    // } else if (isCollisionResult == true && sprite_lst[ball].y_ >= 5) {
-    //   Serial.print("***BRICK***");
-      // int brick_removal_index = (sprite_lst[ball].x_ + 2) + ((7 - sprite_lst[ball].y_ ) * 8);
-      // sprite_lst[brick_removal_index].write(0, 0, 0);
-      // gameScreen.clearSprite(sprite_lst[brick_removal_index]);
-      // gameScreen.updateMasterScreen(sprite_lst[brick_removal_index]);
+      break;
+
     } else if (sprite_lst[ball].isR_boardCollision() == true) {
       Serial.print("***RIGHT***");
       // collision with right wall
@@ -453,7 +460,7 @@ switch (gameState) {
   case STARTGAME:
     //*******Game board Specific Sprite starting Position Stuff*********
     Serial.print("STARTGAME");
-    sprite_lst[ball].duration = 100;
+    sprite_lst[ball].duration = 500;
 
     sprite_lst[ball].x_ = x_start_pos;
     sprite_lst[ball].y_ = 2;
