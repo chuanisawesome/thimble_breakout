@@ -58,14 +58,13 @@ STARTGAME
 
 possibleStates gameState;
 
-//Starting direction; these are the possibilities for a ball served from the paddle
-int startDir[] = {DWNLEFT, DWNRIGHT};
-
 //***********Paddle Global Variables************
 
 // Paddle
+int death = 0;
 int score = 0;
-int x_start_pos = random(4, 8);
+bool start_dir = 0;
+int x_start_pos = 0;
 int paddle_pos = 2;
 byte leftLeftButton_currentState = 0;
 byte leftLeftButton_previousState = 0;
@@ -260,6 +259,16 @@ sprite_lst[ball].prevState = sprite_lst[ball].state;
 
 //Refer to the ball state diagram in the learning module
 switch (gameState) {
+
+  Serial.print("CURRENT SCORE: ");
+  Serial.print(score);
+
+  Serial.print("CURRENT DEATHS: ");
+  Serial.print(death);
+  if (score > 20){
+    sprite_lst[ball].Sprite(1, 1, 3);
+  }
+
   case UPLEFT:
     Serial.print("---UPLEFT---");
     // Corner case
@@ -274,6 +283,7 @@ switch (gameState) {
       sprite_lst[val_index].write(0, 0, 0);
       gameScreen.clearSprite(sprite_lst[val_index]);
       gameScreen.updateMasterScreen(sprite_lst[val_index]);
+      score++;
       gameState = DWNLEFT;
 
     } else if (sprite_lst[ball].isT_boardCollision() == true) {
@@ -310,6 +320,7 @@ switch (gameState) {
       sprite_lst[brick_removal_index].write(0, 0, 0);
       gameScreen.clearSprite(sprite_lst[brick_removal_index]);
       gameScreen.updateMasterScreen(sprite_lst[brick_removal_index]);
+      score++;
       gameState = DWNRIGHT;
     } else if (sprite_lst[ball].isT_boardCollision() == true) {
       // collision with top board
@@ -362,6 +373,7 @@ switch (gameState) {
     } else if (sprite_lst[ball].isB_boardCollision() == true) {
       Serial.print("***BOTTOM***");
       gameState = DEATH;
+      death++;
     } else {
       // translate the ball normally
       Serial.print("***NORMAL***");
@@ -381,6 +393,7 @@ switch (gameState) {
 
     if (sprite_lst[ball].isB_boardCollision() == true){
       gameState = DEATH;
+      death++;
     }
     if (isCollisionResult == true) {
       Serial.print("***PADDLE***");
@@ -402,6 +415,7 @@ switch (gameState) {
     } else if (sprite_lst[ball].isB_boardCollision() == true) {
       Serial.print("***BOTTOM***");
       gameState = DEATH;
+      death++;
     } else {
       // translate the ball normally
       Serial.print("***NORMAL***");
@@ -422,20 +436,29 @@ switch (gameState) {
 
   case SERVE:
     Serial.print("SERVE");
-    x_start_pos = random(4, 8);
+    start_dir = random(0, 2);
+    if (start_dir == 0) {
+      x_start_pos = random(0, 4);
+      gameState = DWNRIGHT;
+    } else {
+      x_start_pos = random(4, 8);
+      gameState = DWNLEFT;
+    }
+
     sprite_lst[ball].x_ = x_start_pos;
     sprite_lst[ball].y_ = 2;
-    gameState = DWNLEFT;
+
     break;
 
   case STARTGAME:
     //*******Game board Specific Sprite starting Position Stuff*********
     Serial.print("STARTGAME");
-    sprite_lst[ball].duration = 150;
+    sprite_lst[ball].duration = 100;
 
     sprite_lst[ball].x_ = x_start_pos;
     sprite_lst[ball].y_ = 2;
 
+    death = 0;
     score = 0;
 
     // Clear the whole screen first.
