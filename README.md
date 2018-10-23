@@ -3,8 +3,10 @@
 Changed pong to breakout for a compitition called MakerSummit at UW. Thimble rgb arcade remix
 
 
-![alt text](https://github.com/chuanisawesome/thimble_breakout/blob/master/thimble-photos/Components.jpg)
+[<img src="https://github.com/chuanisawesome/thimble_breakout/blob/master/thimble-photos/Components.jpg">](https://learning.thimble.io/modules/rgb-matrix-arcade)
 
+
+![alt text](https://github.com/chuanisawesome/thimble_breakout/blob/master/thimble-photos/Components.jpg)
 
 
 
