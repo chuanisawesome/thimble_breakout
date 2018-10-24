@@ -3,7 +3,7 @@
 Changed default game pong to breakout for a compitition called MakerSummit at University of Washington. Thimble rgb arcade remix
 
 ## Components
-* These components were given to us from the [Thimble.io](https://www.thimble.io/)
+* These components were given to us from [Thimble.io](https://www.thimble.io/)
 #### Included:
     * Arduino Headers
     * Resistors
