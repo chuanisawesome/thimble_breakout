@@ -38,3 +38,5 @@ Changed default game pong to breakout for a compitition called MakerSummit at Un
 
 ## Finished PCB
 [<img src="https://github.com/chuanisawesome/thimble_breakout/blob/master/thimble-photos/FinalProduct.jpg">](https://learning.thimble.io/modules/rgb-matrix-arcade)
+
+## RGB Remix Breakout
