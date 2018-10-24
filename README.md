@@ -2,9 +2,9 @@
 
 Changed default game pong to breakout for a compitition called MakerSummit at University of Washington. Thimble rgb arcade remix
 
-##Components
+## Components
 * These components were given to us from the [Thimble.io](https://www.thimble.io/)
-####Included:
+#### Included:
     * Arduino Headers
     * Resistors
     * Capacitor
@@ -22,18 +22,19 @@ Changed default game pong to breakout for a compitition called MakerSummit at Un
     * LED Matrix
 [<img src="https://github.com/chuanisawesome/thimble_breakout/blob/master/thimble-photos/Components.jpg">](https://learning.thimble.io/modules/rgb-matrix-arcade)
 
-##Front PCB
+## Front PCB
 [<img src="https://github.com/chuanisawesome/thimble_breakout/blob/master/thimble-photos/Front-PCB.jpg">](https://learning.thimble.io/modules/rgb-matrix-arcade)
 
-##Back PCB
+## Back PCB
 [<img src="https://github.com/chuanisawesome/thimble_breakout/blob/master/thimble-photos/Back-PCB.jpg">](https://learning.thimble.io/modules/rgb-matrix-arcade)
 
-##Mechanical Assembly
-####Included:
+## Mechanical Assembly
+#### Included:
     * Acrylic Side Panels
     * M3 6mm Screw
     * M3 6mm Nut
+
 [<img src="https://github.com/chuanisawesome/thimble_breakout/blob/master/thimble-photos/MechanicalAssembly.jpg>](https://learning.thimble.io/modules/rgb-matrix-arcade)
 
-##Finished PCB
+## Finished PCB
 [<img src="https://github.com/chuanisawesome/thimble_breakout/blob/master/thimble-photos/FinalProduct.jpg">](https://learning.thimble.io/modules/rgb-matrix-arcade)
